@@ -1,12 +1,37 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
+import { PaperProvider, TextInput, Text, Button } from 'react-native-paper';
+import { useState } from 'react';
 
 export default function App() {
+
+  let [cep, setCep] = useState("");
+
+  const BuscaCep=(x)=>{
+    let url=`https://viacep.com.br/ws/${x}/json/`;
+    console.log(url);
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <PaperProvider>
+      <View style={styles.container}>
+        <Text>Via Cep {cep}</Text>
+
+        <TextInput
+          label={'CEP:'}
+          mode='outlined'
+          onChangeText={(value)=>{setCep(value)}}
+        />
+        <Button icon = "magnify" 
+          onPress = {()=>{BuscaCep(cep)}}
+          mode = "contained"
+        >
+          Busca
+        </Button>
+    
+        <StatusBar style="auto" />
+      </View>
+    </PaperProvider>
   );
 }
 
