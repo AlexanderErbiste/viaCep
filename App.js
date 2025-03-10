@@ -6,10 +6,29 @@ import { useState } from 'react';
 export default function App() {
 
   let [cep, setCep] = useState("");
+  let [render, setRender] = useState([]);
 
-  const BuscaCep=(x)=>{
-    let url=`https://viacep.com.br/ws/${x}/json/`;
+
+  const BuscaCep = (x) => {
+    let url = `https://viacep.com.br/ws/${x}/json/`;
     console.log(url);
+
+    fetch(url)
+      .then(
+        (resp) => { return resp.json() }
+      ).then(
+        (dados) => {
+          console.log(dados);
+
+          console.log(dados.logradouro);
+          console.log(dados["logradouro"]);
+          setRender(dados);
+
+        }
+      ).catch(
+        (erro) => { console.log(erro) }
+      )
+
   }
 
   return (
@@ -20,15 +39,20 @@ export default function App() {
         <TextInput
           label={'CEP:'}
           mode='outlined'
-          onChangeText={(value)=>{setCep(value)}}
+          onChangeText={(value) => { setCep(value) }}
         />
-        <Button icon = "magnify" 
-          onPress = {()=>{BuscaCep(cep)}}
-          mode = "contained"
+        <Button icon="magnify"
+          onPress={() => { BuscaCep(cep) }}
+          mode="contained"
         >
           Busca
         </Button>
-    
+
+          <Text> Endereço : { render["logradouro"] }</Text>
+          <Text> Bairro : { render["bairro"] }</Text>
+          <Text> Cidade : { render.localidade }</Text>
+          <Text> Estado : { render.estado }</Text>
+
         <StatusBar style="auto" />
       </View>
     </PaperProvider>
@@ -38,7 +62,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#349',
     alignItems: 'center',
     justifyContent: 'center',
   },
